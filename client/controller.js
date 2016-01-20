@@ -23,6 +23,8 @@
   var isCzar            = false;
   var isAnswerView      = false;
   var changedCards      = 0;
+  var pick              = 1;
+  var pickCount         = 0;
 
   function main() {
     if ('WebSocket' in window) {
@@ -118,6 +120,9 @@
   };
 
   function drawBlackCard(card) {
+    pick      = card.pick || 1;
+    pickCount = 0;
+
     var qTextEl = document.getElementById('q-text');
     qTextEl.innerHTML = formatCardText(card.text || '');
   };
@@ -280,12 +285,16 @@
       card = answers[currentCardIndex];
       ws.emit(CMD.CZAR_PICK, toPayload({ awesomePlayerId: card.playerId }));
     } else {
-      // TODO: handle multiple pick case
+      pickCount++;
+
       card = cards[currentCardIndex];
       changeCard();
+      // TODO: prevent the replacement card from showing up
       ws.emit(CMD.PICK_CARD, toPayload({ cardId: card.id }));
 
-      renderWaitView();
+      if (pickCount === pick) {
+        renderWaitView();
+      }
     }
   };
 

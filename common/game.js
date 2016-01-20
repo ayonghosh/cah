@@ -4,6 +4,7 @@ var PLAYER_ID_KEY           = 'id';
 var WHITE_PP                = 10;
 var INIT_RANK               = 1.0;
 var INIT_NUM_WHITE_CARDS    = 10;
+var ANSWER_SEPARATOR        = ', '
 
 var HOUSE_RULES = {
   // Rebooting the universe
@@ -133,7 +134,7 @@ Game.prototype.electCzar = function () {
 
 Game.prototype.drawBlackCard = function (num) {
   var randomIndex = this.qPool.length + 1;
-  while (!this.qPool[randomIndex] || this.qPool[randomIndex].pick === 2) {
+  while (!this.qPool[randomIndex]) {
     randomIndex = Math.round(Math.random() * (this.qPool.length + 1));
   }
 
@@ -223,10 +224,15 @@ Game.prototype.getAnswers = function () {
       var card   = this.findCard(cardId);
       cards.push(card);
     }
+    var text  = '';
+    var texts = []
+    for (var i = 0; i < cards.length; i++) {
+      texts.push(cards[i].text);
+    }
     answers.push({
       playerId: playerId,
       cards   : cards,
-      text    : cards[0].text
+      text    : texts.join(ANSWER_SEPARATOR)
     });
   }
 
@@ -243,8 +249,13 @@ Game.prototype.newRound = function () {
 
 Game.prototype.allPlayed = function () {
   var len = 0;
+  var blackCard = this.getBlackCard();
+  var pick = blackCard.pick || 1;
   for (var key in this.roundMap) {
     len++;
+    if (this.roundMap[key].length < pick) {
+      return false;
+    }
   }
 
   return (len === (this.playerList.length - 1));
