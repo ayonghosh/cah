@@ -1,0 +1,16 @@
+{
+  "name": "TurdsAgainstHumanity",
+  "version": "1.0.0",
+  "description": "Cards Against Humanity game for the web",
+  "author": "Ayon Ghosh <ayonghosh88@gmail.com>",
+  "scripts": {
+    "start": "node server/index.js"
+  },
+  "dependencies": {
+    "routes": "2.1.0",
+    "socket.io": "*"
+  },
+  "preferGlobal": true,
+  "private": true,
+  "license": "CC-BY-NC-SA-2.0"
+}
