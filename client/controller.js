@@ -7,6 +7,7 @@
 
   var CMD = <%COMMANDS%>;
   var ANONYMOUS_USERNAME = 'Pussy';
+  var MAX_CHANGED_CARDS = 10;
 
   var ws = null;
   var host = window.location.hostname;
@@ -21,6 +22,7 @@
   var currentPickIndex  = null;
   var isCzar            = false;
   var isAnswerView      = false;
+  var changedCards      = 0;
 
   function main() {
     if ('WebSocket' in window) {
@@ -117,7 +119,7 @@
 
   function drawBlackCard(card) {
     var qTextEl = document.getElementById('q-text');
-    qTextEl.innerHTML = card.text;
+    qTextEl.innerHTML = formatCardText(card.text || '');
   };
 
   function drawWhiteCards(whiteCards) {
@@ -221,6 +223,7 @@
   function renderPlayerView() {
     currentCardIndex = 0;
     isAnswerView = false;
+    changedCards = 0;
 
     if (isCzar) {
       toggleView('a-pane', false);
@@ -233,6 +236,7 @@
       showCard();
     }
     toggleView('pick', true, true);
+    toggleView('draw', true, true);
   };
 
   function renderAnswerView(answerCards) {
@@ -245,6 +249,7 @@
     if (!isCzar) {
       toggleView('pick', false, true);
     }
+    toggleView('draw', false, true);
     toggleView('overlay', false);
 
     showCard();
@@ -254,9 +259,17 @@
     toggleView('a-pane', false);
     toggleView('p-ctrl', false);
     toggleView('overlay', true);
+    toggleView('draw', false, true);
   };
 
-  function changeCard() {
+  function changeCard(event) {
+    // Allow changing up to 10 cards
+    if (event) {
+      changedCards++;
+      if (changedCards === MAX_CHANGED_CARDS) {
+        toggleView('draw', false, true);
+      }
+    }
     var card = cards[currentCardIndex];
     ws.emit(CMD.CHANGE_CARD, toPayload({ cardId: card.id }));
   }

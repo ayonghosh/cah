@@ -133,7 +133,7 @@ Game.prototype.electCzar = function () {
 
 Game.prototype.drawBlackCard = function (num) {
   var randomIndex = this.qPool.length + 1;
-  while (!this.qPool[randomIndex]) {
+  while (!this.qPool[randomIndex] || this.qPool[randomIndex].pick === 2) {
     randomIndex = Math.round(Math.random() * (this.qPool.length + 1));
   }
 
