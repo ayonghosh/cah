@@ -6,7 +6,6 @@
   };
 
   var CMD = <%COMMANDS%>;
-  var ANONYMOUS_USERNAME = 'Pussy';
   var MAX_CHANGED_CARDS = 10;
 
   var ws = null;
@@ -319,7 +318,7 @@
     mainView.className = 'main-ctr play';
     var playerNameInputEl = document.getElementById('p-name-input');
     var playerName = playerNameInputEl.value.length ? playerNameInputEl.value :
-      (ANONYMOUS_USERNAME + Date.now() % 100);
+      ('Poop' + Date.now() % 10 + 'r');
     if (gameId) {
       ws.emit(CMD.JOIN_GAME, toPayload({ playerName: playerName }));
     } else {
