@@ -317,7 +317,6 @@
 
       card = cards[currentCardIndex];
       changeCard();
-      // TODO: prevent the replacement card from showing up
       ws.emit(CMD.PICK_CARD, toPayload({ cardId: card.id }));
 
       if (pickCount === pick) {

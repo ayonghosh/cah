@@ -20,12 +20,6 @@ var CZAR_ELECT_POLICY = {
   RANDOM        : 1001
 };
 
-var GAME_STATE = {
-  ROUND_START   : 200,
-  WAIT_FOR_PICK : 201,
-  WAIT_FOR_CZAR : 202
-};
-
 
 // Player
 var Player = function (playerId, playerName) {
