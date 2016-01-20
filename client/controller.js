@@ -194,6 +194,13 @@
         '</div>';
     }
     var playerPane = document.getElementById('p-pane');
+    // Replay animation
+    var className = playerPane.className;
+    playerPane.className = '';
+    setTimeout(function () {
+      playerPane.className = className;
+    }, 10);
+
     playerPane.innerHTML = markup;
 
     if (isCzar) {

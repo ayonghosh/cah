@@ -497,7 +497,7 @@ module.exports = function () {
       },
       {
         id: 'w030',
-        text: 'Five-Dollar Footlongs (TM).'
+        text: 'Five-Dollar Footlongs(TM).'
       },
       {
         id: 'w031',
@@ -1429,7 +1429,7 @@ module.exports = function () {
       },
       {
         id: 'w263',
-        text: 'Lunchables (TM).'
+        text: 'Lunchables(TM).'
       },
       {
         id: 'w264',

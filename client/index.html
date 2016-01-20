@@ -45,7 +45,9 @@
         margin: 10px;
         width: 90%;
         text-align: right;
+      }
 
+      .slide-up {
         animation-name: slideUp;
 	      -webkit-animation-name: slideUp;
 
@@ -216,6 +218,8 @@
       }
 
       .wait-msg {
+        font-size: 18px;
+
         animation-name: floating;
       	-webkit-animation-name: floating;
 
@@ -361,7 +365,8 @@
         <div class="title"><%GAME_TITLE%></div>
         <div class="login-pane">
           <div class="name-prompt">
-            Hi there, Horrible! Enter a name by which we can publicly shame you:
+            Hi there, Horrible Human!
+            Enter a name we can publicly shame you by:
           </div>
           <input type="text" id="p-name-input"/>
           <div class="error-msg"></div>
@@ -373,7 +378,7 @@
       <div id="play-view" class="screen">
         <div id="q-pane">
           <div id="q-text"></div>
-          <div id="p-pane">
+          <div id="p-pane" class="slide-up">
           </div>
         </div>
         <div id="a-pane">
@@ -393,7 +398,7 @@
       <div id="overlay" style="display:none">
         <br>
         <div class="wait-msg">
-          <div>Waiting for answers...</div>
+          <div>Waiting for lesser mortals...</div>
         </div>
       </div>
     </div>
