@@ -248,6 +248,8 @@
     isAnswerView = false;
     changedCards = 0;
 
+    document.getElementById('a-pane').className = '';
+
     if (isCzar) {
       toggleView('a-pane', false);
       toggleView('p-ctrl', false);
@@ -272,6 +274,8 @@
     answers = answerCards;
     currentCardIndex = 0;
     isAnswerView = true;
+
+    document.getElementById('a-pane').className = 'curved-edge';
 
     toggleView('a-pane', true);
     toggleView('p-ctrl', true);
