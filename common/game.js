@@ -4,7 +4,7 @@ var PLAYER_ID_KEY           = 'id';
 var WHITE_PP                = 10;
 var INIT_RANK               = 1.0;
 var INIT_NUM_WHITE_CARDS    = 10;
-var ANSWER_SEPARATOR        = ', '
+var ANSWER_SEPARATOR        = ' , '
 
 var HOUSE_RULES = {
   // Rebooting the universe
@@ -123,15 +123,6 @@ Game.prototype.getPlayer = function (playerId) {
   return null;
 };
 
-Game.prototype.playBlack = function () {
-
-};
-
-Game.prototype.electCzar = function () {
-  var randomIndex = Math.round(Math.random() * (this.playerList.length + 1));
-  this.czar = playerList[randomIndex][PLAYER_ID_KEY];
-};
-
 Game.prototype.drawBlackCard = function (num) {
   var randomIndex = this.qPool.length + 1;
   while (!this.qPool[randomIndex]) {
@@ -175,7 +166,11 @@ Game.prototype.changeCard = function (playerId, cardId) {
     var newWhiteCards = [];
     for (var i = 0; i < whiteCards.length; i++) {
       if (whiteCards[i].id === cardId) {
-        newWhiteCards.push(newCards[0]);
+        newWhiteCards.push({
+          id  : newCards[0].id,
+          text: newCards[0].text,
+          hide: true
+        });
         var index = this.aTakenIds.indexOf(cardId);
         this.aTakenIds[index] = null;
       } else {

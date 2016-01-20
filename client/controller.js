@@ -104,6 +104,7 @@
       data = JSON.parse(data || '{}');
       if (data.gameId === gameId) {
         renderPlayerView();
+        resetCards();
       }
     })
   };
@@ -165,7 +166,11 @@
     } else {
       currentCardIndex = (currentCardIndex + 1) % cards.length;
     }
-    showCard();
+    if (cards[currentCardIndex].hide) {
+      showNextCard();
+    } else {
+      showCard();
+    }
   };
 
   function showPrevCard() {
@@ -178,7 +183,12 @@
     } else {
       currentCardIndex--;
     }
-    showCard();
+
+    if (cards[currentCardIndex].hide) {
+      showPrevCard();
+    } else {
+      showCard();
+    }
   };
 
   function renderPlayers(players) {
@@ -242,6 +252,12 @@
     }
     toggleView('pick', true, true);
     toggleView('draw', true, true);
+  };
+
+  function resetCards() {
+    for (var i = 0; i < cards.length; i++) {
+      cards[i].hide = false;
+    }
   };
 
   function renderAnswerView(answerCards) {
