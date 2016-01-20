@@ -165,8 +165,13 @@
     } else {
       currentCardIndex = (currentCardIndex + 1) % cards.length;
     }
-    if (cards[currentCardIndex].hide) {
-      showNextCard();
+
+    if (!isAnswerView) {
+      if (cards[currentCardIndex].hide) {
+        showNextCard();
+      } else {
+        showCard();
+      }
     } else {
       showCard();
     }
@@ -183,8 +188,12 @@
       currentCardIndex--;
     }
 
-    if (cards[currentCardIndex].hide) {
-      showPrevCard();
+    if (!isAnswerView) {
+      if (cards[currentCardIndex].hide) {
+        showPrevCard();
+      } else {
+        showCard();
+      }
     } else {
       showCard();
     }
