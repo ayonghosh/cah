@@ -2,7 +2,7 @@ var Logger  = require('./logger.js');
 var Game    = require('../common/game.js');
 
 module.exports = (function (config) {
-  var LOGNAME = 'app';
+  var LOGNAME = 'gameapp';
 
   var COMMAND = {
     START_GAME    : 'sg',
@@ -20,7 +20,9 @@ module.exports = (function (config) {
     PROMPT_CZAR   : 'pz',
     CZAR_PICK     : 'zp',
     AWESOME_POINT : 'ap',
-    NEW_ROUND     : 'nr'
+    NEW_ROUND     : 'nr',
+    END_GAME      : 'eg',
+    NEW_GAME      : 'ng'
   }
 
   var RESPONSE = {
@@ -133,17 +135,27 @@ module.exports = (function (config) {
       var player = game.getPlayer(playerId);
       var whiteCards = player.getCards();
 
+      Logger.log(Logger.LOGLEVEL.INFO, 'Player ' + playerId +
+        ' (' + playerName +
+        ') has joined game: ' + gameId, LOGNAME, { src: 'self' });
+
       return [
-        getResponseTuple(COMMAND.JOIN_ACK,    playerId),
-        getResponseTuple(COMMAND.DRAW_BLACK, {
-          gameId    : game.getId(),
-          blackCard : game.getBlackCard()
-        }),
-        getResponseTuple(COMMAND.DRAW_WHITE,  whiteCards),
-        getResponseTuple(COMMAND.GET_PLAYERS, {
-          gameId: game.getId(),
-          players: game.getPlayers()
-        }, true)
+        {
+          gameId  : game.getId(),
+          playerId: playerId
+        },
+        [
+          getResponseTuple(COMMAND.JOIN_ACK,    playerId),
+          getResponseTuple(COMMAND.DRAW_BLACK, {
+            gameId    : game.getId(),
+            blackCard : game.getBlackCard()
+          }),
+          getResponseTuple(COMMAND.DRAW_WHITE,  whiteCards),
+          getResponseTuple(COMMAND.GET_PLAYERS, {
+            gameId: game.getId(),
+            players: game.getPlayers()
+          }, true)
+        ]
       ];
     }
   };
@@ -180,10 +192,12 @@ module.exports = (function (config) {
   // Player starts a game
   function onPlayerStartGame(playerName) {
     var game = createGame();
-    Logger.log(Logger.LOGLEVEL.INFO, 'Created game with ID: ' +
-      game.getId(), LOGNAME, { src: 'self' });
 
     var playerId = game.addPlayer(playerName, true);
+
+    Logger.log(Logger.LOGLEVEL.INFO, 'Player ' + playerId +
+      ' (' + playerName + ') ' +
+      'has started game: ' + game.getId(), LOGNAME, { src: 'self' });
 
     var players = [];
     var playerList = game.getPlayers();
@@ -195,17 +209,23 @@ module.exports = (function (config) {
     var whiteCards = player.getCards();
 
     return [
-      getResponseTuple(COMMAND.GAME_INIT,   game.getId()),
-      getResponseTuple(COMMAND.JOIN_ACK,    playerId),
-      getResponseTuple(COMMAND.DRAW_BLACK,  {
-        gameId    : game.getId(),
-        blackCard : game.getBlackCard()
-      }),
-      getResponseTuple(COMMAND.DRAW_WHITE,  whiteCards),
-      getResponseTuple(COMMAND.GET_PLAYERS, {
+      {
         gameId  : game.getId(),
-        players : game.getPlayers()
-      }, true)
+        playerId: playerId
+      },
+      [
+        getResponseTuple(COMMAND.GAME_INIT,   game.getId()),
+        getResponseTuple(COMMAND.JOIN_ACK,    playerId),
+        getResponseTuple(COMMAND.DRAW_BLACK,  {
+          gameId    : game.getId(),
+          blackCard : game.getBlackCard()
+        }),
+        getResponseTuple(COMMAND.DRAW_WHITE,  whiteCards),
+        getResponseTuple(COMMAND.GET_PLAYERS, {
+          gameId  : game.getId(),
+          players : game.getPlayers()
+        }, true)
+      ]
     ];
   };
 
@@ -235,7 +255,51 @@ module.exports = (function (config) {
         gameId        : game.getId(),
       }, true)
     ];
-  }
+  };
+
+  function onPlayerQuit(gameId, playerId) {
+    var game = getGame(gameId);
+    if (game) {
+      game.removePlayer(playerId);
+      Logger.log(Logger.LOGLEVEL.INFO, 'Player ' + playerId + ' has left ' +
+        'game: ' + gameId, LOGNAME, { src: 'self' });
+    } else {
+      return null;
+    }
+
+    if (game.getPlayers().length === 0) {
+      endGame(gameId);
+      return null;
+    }
+
+    if (game) {
+      return [
+        getResponseTuple(COMMAND.GET_PLAYERS, {
+          gameId  : gameId,
+          players : game.getPlayers()
+        }, true)
+      ];
+    }
+  };
+
+  function endGame(gameId) {
+    var index = 0;
+    for (var i = 0; i < games.length; i++) {
+      if (games[i].getId() === gameId) {
+        index = i;
+        break;
+      }
+    }
+    if (index < games.length) {
+      games.splice(index, 1);
+      Logger.log(Logger.LOGLEVEL.INFO, 'Ended game with ID: ' +
+        gameId, LOGNAME, { src: 'self' });
+    }
+  };
+
+  function endAll() {
+    games = [];
+  };
 
 
   // Public members and functions
@@ -250,6 +314,7 @@ module.exports = (function (config) {
     onPlayerStartGame   : onPlayerStartGame,
     onPlayerChangeCard  : onPlayerChangeCard,
     onPlayerPickCard    : onPlayerPickCard,
-    onCzarPickCard      : onCzarPickCard
+    onCzarPickCard      : onCzarPickCard,
+    onPlayerQuit        : onPlayerQuit
   }
 })();

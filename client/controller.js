@@ -10,7 +10,7 @@
 
   var ws = null;
   var host = window.location.hostname;
-  var port = <%PORT%>;//window.location.port;
+  var port = <%PORT%>;
 
   // Game state
   var gameId            = null;
@@ -27,7 +27,11 @@
 
   function main() {
     if ('WebSocket' in window) {
-      ws = io.connect('ws://' + host/* + ':' + port*/);
+      var wsHost = 'ws://' + host;
+      if (host.indexOf('localhost') === 0 || host.indexOf('127.0.0.1') === 0) {
+        wsHost += ':' + port;
+      }
+      ws = io.connect(wsHost);
 
       var path      = window.location.pathname;
       var isNewGame = document.getElementById('new-game').value;

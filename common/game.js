@@ -100,7 +100,20 @@ Game.prototype.addPlayer = function (playerName, isCzar) {
 };
 
 Game.prototype.removePlayer = function (playerId) {
-  // TODO
+  var index = -1;
+  for (var i = 0; i < this.playerList.length; i++) {
+    if (this.playerList[i].getId() === playerId) {
+      index = i;
+      break;
+    }
+  }
+  if (index >= 0 && index < this.playerList.length) {
+    this.playerList.splice(index, 1);
+
+    return true;
+  }
+
+  return false;
 };
 
 Game.prototype.getPlayers = function () {

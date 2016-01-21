@@ -1,9 +1,7 @@
 var http      = require('http');
 var fs        = require('fs');
 var router    = require('routes')();
-var io        = require('socket.io')({
-  'origins': 'http://cahz.herokuapp.com:*'
-});
+var io        = require('socket.io');
 
 var app       = require('./app.js');
 var Logger    = require('./logger.js');
@@ -137,17 +135,26 @@ var Logger    = require('./logger.js');
 
   // API
   socket.sockets.on('connection', function (client) {
-    var clientId = null;
+    var _gameId   = null;
+    var _playerId = null;
 
     client.on(app.COMMAND.START_GAME, function (playerName) {
       var response = app.onPlayerStartGame(playerName);
-      _sendWsResponse(response, client);
+
+      _gameId   = response[0].gameId;
+      _playerId = response[0].playerId;
+
+      _sendWsResponse(response[1], client);
     });
 
     client.on(app.COMMAND.JOIN_GAME, function (data) {
       data = JSON.parse(data);
       var response = app.onPlayerJoinGame(data);
-      _sendWsResponse(response, client);
+
+      _gameId   = response[0].gameId;
+      _playerId = response[0].playerId;
+
+      _sendWsResponse(response[1], client);
     });
 
     client.on(app.COMMAND.CHANGE_CARD, function (data) {
@@ -168,8 +175,16 @@ var Logger    = require('./logger.js');
       _sendWsResponse(response, client);
     });
 
+    client.on(app.COMMAND.END_GAME, function (data) {
+      data = JSON.parse(data);
+      app.endGame(data.gameId);
+    });
+
     client.on('disconnect', function () {
-      // TODO: garbage collect old games
+      var response = app.onPlayerQuit(_gameId, _playerId);
+      if (response) {
+        _sendWsResponse(response, client);
+      }
     });
   });
 
