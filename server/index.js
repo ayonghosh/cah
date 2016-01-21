@@ -1,7 +1,9 @@
 var http      = require('http');
 var fs        = require('fs');
 var router    = require('routes')();
-var io        = require('socket.io');
+var io        = require('socket.io')({
+  'origins': 'http://cahz.herokuapp.com:*'
+});
 
 var app       = require('./app.js');
 var Logger    = require('./logger.js');
@@ -18,7 +20,6 @@ var Logger    = require('./logger.js');
   var socket;
 
   var port = process.env.PORT || PORT;
-
 
   function _replaceAll(str, find, replace) {
     return str.replace(new RegExp(find, 'g'), replace);
@@ -129,7 +130,6 @@ var Logger    = require('./logger.js');
   });
 
   // Start web sockets+HTTP server
-  io.set('origins', 'http://cahz.herokuapp.com:' + port);
   socket = io.listen(server.listen(port));
   Logger.log(Logger.LOGLEVEL.INFO, 'Started HTTP+websocket server on port ' +
              port, LOGNAME, { src: 'self' });
