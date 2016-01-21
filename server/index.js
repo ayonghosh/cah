@@ -126,9 +126,10 @@ var Logger    = require('./logger.js');
   });
 
   // Start web sockets+HTTP server
-  socket = io.listen(server.listen(PORT));
+  var port = process.env.PORT || PORT;
+  socket = io.listen(server.listen(port));
   Logger.log(Logger.LOGLEVEL.INFO, 'Started HTTP+websocket server on port ' +
-             PORT, LOGNAME, { src: 'self' });
+             port, LOGNAME, { src: 'self' });
 
 
   // API
