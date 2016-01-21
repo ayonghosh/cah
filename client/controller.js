@@ -125,6 +125,9 @@
 
     var qTextEl = document.getElementById('q-text');
     qTextEl.innerHTML = formatCardText(card.text || '');
+
+    var pickHintEl = document.getElementById('pick-hint');
+    pickHintEl.innerHTML = formatCardText('PICK ' + (card.pick || 1));
   };
 
   function drawWhiteCards(whiteCards) {
@@ -281,7 +284,10 @@
     toggleView('p-ctrl', true);
     if (!isCzar) {
       toggleView('pick', false, true);
+    } else {
+      document.getElementById('pick-hint').innerHTML = '+1';
     }
+
     toggleView('draw', false, true);
     toggleView('overlay', false);
 

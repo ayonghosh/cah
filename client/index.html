@@ -153,12 +153,12 @@
 
       #draw {
         position: relative;
-        bottom: 5px;
+        bottom: 0;
       }
 
       #pick {
         position: relative;
-        bottom: 2px;
+        bottom: 0;
         margin-right: 15%;
       }
 
@@ -167,6 +167,11 @@
         background: #000;
         color: #fff;
         padding: 20px;
+      }
+
+      .hint {
+        font-size: 8px;
+        margin-top: -7px;
       }
 
       .title {
@@ -404,8 +409,17 @@
         <div id="p-ctrl">
           <div id="prev" class="p-ctrl-btn">&#10096;</div>
           <div id="next" class="p-ctrl-btn">&#10097;</div>
-          <div id="pick" class="p-ctrl-btn">&#10084;</div>
-          <div id="draw" class="p-ctrl-btn">&#8634;</div>
+          <div id="pick" class="p-ctrl-btn">
+            <span>&#10084;</span>
+            <div class="hint" id="pick-hint">
+            </div>
+          </div>
+          <div id="draw" class="p-ctrl-btn">
+            <span>&#8634;</span>
+            <div class="hint">
+              CHANGE
+            </div>
+          </div>
         </div>
       </div>
       <input type="hidden" value="<%NEW_GAME%>" id="new-game"/>
