@@ -27,7 +27,7 @@
 
   function main() {
     if ('WebSocket' in window) {
-      ws = io.connect('ws://' + host + ':' + port);
+      ws = io.connect('ws://' + host/* + ':' + port*/);
 
       var path      = window.location.pathname;
       var isNewGame = document.getElementById('new-game').value;
