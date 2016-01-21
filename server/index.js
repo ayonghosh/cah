@@ -17,6 +17,8 @@ var Logger    = require('./logger.js');
   var server;
   var socket;
 
+  var port = process.env.PORT || PORT;
+
 
   function _replaceAll(str, find, replace) {
     return str.replace(new RegExp(find, 'g'), replace);
@@ -109,6 +111,7 @@ var Logger    = require('./logger.js');
   router.addRoute('/js/controller.js', function (req, res, params) {
     var jsCode = fs.readFileSync(JS_FILE_PATH).toString();
     jsCode = jsCode.replace('<%COMMANDS%>', JSON.stringify(app.COMMAND));
+    jsCode = jsCode.replace('<%PORT%>', port);
     _sendResponse(res, { body:  jsCode})();
     Logger.log(Logger.LOGLEVEL.INFO, req.method + ' /controller.js',
       LOGNAME, _info(req));
@@ -126,7 +129,6 @@ var Logger    = require('./logger.js');
   });
 
   // Start web sockets+HTTP server
-  var port = process.env.PORT || PORT;
   socket = io.listen(server.listen(port));
   Logger.log(Logger.LOGLEVEL.INFO, 'Started HTTP+websocket server on port ' +
              port, LOGNAME, { src: 'self' });

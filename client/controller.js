@@ -10,7 +10,7 @@
 
   var ws = null;
   var host = window.location.hostname;
-  var port = window.location.port;
+  var port = <%PORT%>;//window.location.port;
 
   // Game state
   var gameId            = null;
