@@ -12,5 +12,6 @@
   },
   "preferGlobal": true,
   "private": true,
-  "license": "CC-BY-NC-SA-2.0"
+  "license": "CC-BY-NC-SA-2.0",
+  "main": "server/index.js"
 }
