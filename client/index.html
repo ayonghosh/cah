@@ -249,6 +249,31 @@
       	-webkit-animation-iteration-count: infinite;
       }
 
+      #awesome {
+        height: 100%;
+        top: 0;
+        width: 100%;
+        text-align: center;
+        font-size: 250px;
+        position: fixed;
+        color: #ccc;
+        z-index: 10005;
+      }
+
+      #awesome > div {
+        color: #ffa700;
+        line-height: 400px;
+      }
+
+      .awesome-anim {
+        animation-name: expandOpen;
+        -webkit-animation-name: expandOpen;
+        animation-duration: 0.5s;
+        -webkit-animation-duration: 0.5s;
+        animation-timing-function: ease-out;
+        -webkit-animation-timing-function: ease-out;
+      }
+
       /* View rules */
       #main-view {
         height: 100%;
@@ -377,6 +402,48 @@
       		-webkit-transform: translateY(0%);
       	}
       }
+
+      @keyframes expandOpen {
+        0% {
+          transform: scale(1.8);
+        }
+        50% {
+          transform: scale(0.95);
+        }
+        80% {
+          transform: scale(1.05);
+          opacity: 0.9;
+        }
+        90% {
+          transform: scale(0.98);
+          opacity: 0.5;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 0;
+        }
+      }
+
+      @-webkit-keyframes expandOpen {
+        0% {
+          -webkit-transform: scale(1.8);
+        }
+        50% {
+          -webkit-transform: scale(0.95);
+        }
+        80% {
+          -webkit-transform: scale(1.05);
+          opacity: 0.9;
+        }
+        90% {
+          -webkit-transform: scale(0.98);
+          opacity: 0.5
+        }
+        100% {
+          -webkit-transform: scale(1);
+          opacity: 0;
+        }
+}
     </style>
   </head>
   <body>
@@ -429,6 +496,9 @@
         <div class="wait-msg">
           <div>Waiting for lesser mortals...</div>
         </div>
+      </div>
+      <div id="awesome" style="display:none">
+        <div>+1</div>
       </div>
     </div>
     <!-- Socket.io -->

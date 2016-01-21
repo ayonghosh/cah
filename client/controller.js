@@ -105,6 +105,13 @@
         renderPlayerView();
         resetCards();
       }
+    });
+
+    ws.on(CMD.AWESOME_POINT, function (data) {
+      data = JSON.parse(data || '{}');
+      if (data.gameId === gameId && data.playerId === playerId) {
+        renderAwesome();
+      }
     })
   };
 
@@ -342,6 +349,15 @@
     } else {
       ws.emit(CMD.START_GAME, playerName);
     }
+  };
+
+  function renderAwesome() {
+    document.getElementById('awesome').className = 'awesome-anim';
+    toggleView('awesome', true);
+    setTimeout(function () {
+      toggleView('awesome', false);
+      document.getElementById('awesome').className = '';
+    }, 500);
   };
 
   main();

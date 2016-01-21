@@ -5,21 +5,22 @@ module.exports = (function (config) {
   var LOGNAME = 'app';
 
   var COMMAND = {
-    START_GAME  : 'sg',
-    GAME_INIT   : 'gi',
-    GET_CARDS   : 'gc',
-    PICK_CARD   : 'pc',
-    DRAW_CARD   : 'dc',
-    GET_PLAYERS : 'gp',
-    JOIN_GAME   : 'jg',
-    JOIN_ACK    : 'ja',
-    DRAW_BLACK  : 'db',
-    DRAW_WHITE  : 'dw',
-    CHANGE_CARD : 'cc',
-    WAIT_CZAR   : 'wz',
-    PROMPT_CZAR : 'pz',
-    CZAR_PICK   : 'zp',
-    NEW_ROUND   : 'nr'
+    START_GAME    : 'sg',
+    GAME_INIT     : 'gi',
+    GET_CARDS     : 'gc',
+    PICK_CARD     : 'pc',
+    DRAW_CARD     : 'dc',
+    GET_PLAYERS   : 'gp',
+    JOIN_GAME     : 'jg',
+    JOIN_ACK      : 'ja',
+    DRAW_BLACK    : 'db',
+    DRAW_WHITE    : 'dw',
+    CHANGE_CARD   : 'cc',
+    WAIT_CZAR     : 'wz',
+    PROMPT_CZAR   : 'pz',
+    CZAR_PICK     : 'zp',
+    AWESOME_POINT : 'ap',
+    NEW_ROUND     : 'nr'
   }
 
   var RESPONSE = {
@@ -154,7 +155,6 @@ module.exports = (function (config) {
     if (game) {
       var allPlayed = game.pickCard(data.playerId, data.cardId);
       if (!allPlayed) {
-        // TODO: broadcast signal to czar to pick the funniest play
         return [
           getResponseTuple(COMMAND.WAIT_CZAR)
         ];
@@ -209,17 +209,20 @@ module.exports = (function (config) {
     player.setCzar(true);
 
     return [
-      getResponseTuple(COMMAND.DRAW_BLACK,
-        {
-          gameId    : game.getId(),
-          blackCard : game.getBlackCard()
-        }, true),
+      getResponseTuple(COMMAND.AWESOME_POINT, {
+        gameId  : game.getId(),
+        playerId: player.getId()
+      }, true),
+      getResponseTuple(COMMAND.DRAW_BLACK, {
+        gameId    : game.getId(),
+        blackCard : game.getBlackCard()
+      }, true),
       getResponseTuple(COMMAND.GET_PLAYERS, {
         gameId  : game.getId(),
         players : game.getPlayers()
       }, true),
       getResponseTuple(COMMAND.NEW_ROUND, {
-        gameId: game.getId()
+        gameId        : game.getId(),
       }, true)
     ];
   }
