@@ -12,7 +12,7 @@ var Logger    = require('./logger.js');
   var INDEX_FILE_PATH      = __dirname + '/../client/index.html';
   var JS_FILE_PATH         = __dirname + '/../client/controller.js';
 
-  var GAME_TITLE           = 'Cards Against Humanity';
+  var GAME_TITLE           = 'Cardz Against Humanity';
 
   var server;
   var socket;

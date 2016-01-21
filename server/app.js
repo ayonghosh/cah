@@ -37,7 +37,17 @@ module.exports = (function (config) {
 
   var games = [];
 
+  // A 4-character alphanumeric sequence is pretty enough (364 = 1.6 million).
+  // If you need N unique IDs, out of X possibilities, you need to call this
+  // function at most 1/(1 − N / X) times on average to ensure uniqueness.
+  // For a 3-character sequence, you need to call it 1.27 times on average,
+  // and for a 4-character sequence, you need to call it 1.006 times.
   function _guid() {
+    return ("0000" +
+      (Math.random() * Math.pow(36, 4) << 0).toString(36)).slice(-4);
+  };
+
+  function _long_guid() {
     // RFC4122: The version 4 UUID is meant for generating UUIDs from truly-random or
     // pseudo-random numbers.
     // The algorithm is as follows:
