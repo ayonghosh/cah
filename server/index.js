@@ -129,6 +129,7 @@ var Logger    = require('./logger.js');
   });
 
   // Start web sockets+HTTP server
+  io.set('origins', 'http://cahz.herokuapp.com:' + port);
   socket = io.listen(server.listen(port));
   Logger.log(Logger.LOGLEVEL.INFO, 'Started HTTP+websocket server on port ' +
              port, LOGNAME, { src: 'self' });
